@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        #barchart {
+            height: 600px;
+            width:960px;
+            margin:0 auto;
+        }
+        body{
+            text-align:center;
+        }
+    </style>
+</head>
+<body>
+    <div style="text-align:center;">
+        <h3>标题</h3>
+    </div>
+    <div id="barchart"></div>
+    <script src="js/d3.v5.min.js"></script>
+    <script src="js/echarts.min.js"></script>
+
+    <script>
+        option = {
+            tooltip: {
+                formatter: '{b}<br>{a}：{c}%'
+            },
+            yAxis: [{
+                type: 'category',
+                data: []
+            }],
+            xAxis: [{
+                type: 'value'
+            }],
+            series: [{
+                name: 'Percentage',
+                type: 'bar',
+                itemStyle: {
+                    normal: {
+                        color: '#0deaff'
+                    }
+                },
+                barWidth: 15,
+                data: [],
+            }
+            ]
+        };
+        d3.csv("data/Figure_7__online_prices.csv").then(function (data) {
+            var ylist = [], PercentageList = [];
+            data.forEach(function (d) {
+                ylist.push(d["Item"]);
+                PercentageList.push(d["Percentage"] * 1);
+            });
+            option.yAxis[0].data = ylist;
+            option.series[0].data = PercentageList;
+            var barChart = echarts.init(document.getElementById('barchart'));
+            barChart.setOption(option);
+        });
+    </script>
+</body>
+</html>

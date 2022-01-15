@@ -1,0 +1,195 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        #linechart{
+            height:600px;
+        }
+    </style>
+</head>
+<body>
+    <div style="text-align:center;">
+        <h3>标题</h3>
+    </div>
+    <div id="linechart"></div>
+    <script src="js/d3.v5.min.js"></script>
+    <script src="js/echarts.min.js"></script>
+    <script>
+        option = {
+            backgroundColor: '#fff',
+            title: {
+
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['All Visits', 'Unique Visits'],
+                textStyle: {
+                    color: '#333'
+                }
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    mark: {
+                        show: false
+                    },
+                    dataView: {
+                        show: false,
+                        readOnly: false
+                    },
+                    magicType: {
+                        show: false,
+                        type: ['line', 'bar']
+                    },
+                    restore: {
+                        show: false
+                    },
+                    saveAsImage: {
+                        show: false
+                    }
+                }
+            },
+            calculable: true,
+            xAxis: [{
+                type: 'category',
+                boundaryGap: false,
+                data: [],
+                axisLabel: {
+                    show: true,
+                    textStyle: {
+                        color: "#333", //X轴文字颜色
+                        fontSize: 16
+                    }
+                },
+
+            }],
+            yAxis: [{
+                type: 'value',
+                axisLabel: {
+                    formatter: '{value} ',
+                    color: '#333',
+                    textStyle: {
+                        fontSize: 16
+                    }
+                },
+                axisLine: {
+                    show: true,
+                    lineStyle: {
+                        color: "#ccc"
+                    },
+                },
+
+
+            }],
+            series: [{
+                name: 'All Visits',
+                type: 'line',
+                data: [],
+                lineStyle: {
+                    normal: {
+                        width: 2,
+                        color: {
+                            type: 'linear',
+
+                            colorStops: [{
+                                offset: 0,
+                                color: '#57BD9F' // 0% 处的颜色
+                            }, {
+                                offset: 1,
+                                color: '#19BC8C' // 100% 处的颜色
+                            }],
+                            globalCoord: false // 缺省为 false
+                        },
+                        shadowColor: 'rgba(72,216,191, 0.3)',
+                        shadowBlur: 6,
+                        shadowOffsetY: 10
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        color: '#57BD9F',
+                        borderWidth: 10,
+                        borderColor: "#57BD9F"
+                    }
+                },
+                markPoint: {
+                    data: [{
+                        type: 'max',
+                        name: '最大值'
+                    },
+                    {
+                        type: 'min',
+                        name: '最小值'
+                    }
+                    ]
+                },
+
+            },
+            {
+                name: 'Unique Visits',
+                type: 'line',
+                data: [],
+                lineStyle: {
+                    normal: {
+                        width: 2,
+                        color: {
+                            type: 'linear',
+
+                            colorStops: [{
+                                offset: 0,
+                                color: '#7597EB' // 0% 处的颜色
+                            }, {
+                                offset: 1,
+                                color: '#638BEE' // 100% 处的颜色
+                            }],
+                            globalCoord: false // 缺省为 false
+                        },
+                        shadowColor: 'rgba(72,216,191, 0.3)',
+                        shadowBlur: 6,
+                        shadowOffsetY: 10
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        color: '#7597EB',
+                        borderWidth: 10,
+                        borderColor: "#7597EB"
+                    }
+                },
+                markPoint: {
+                    data: [{
+                        type: 'max',
+                        name: '最大值'
+                    },
+                    {
+                        type: 'min',
+                        name: '最小值'
+                    }
+                    ]
+                },
+
+            }
+            ]
+        };
+        d3.csv("data/Figure_9__Both_unique.csv").then(function (data) {
+            var xlist = [], AllVisits = [], UniqueVisits = [];
+            data.forEach(function (d) {
+                xlist.push(d.date);
+                AllVisits.push(d["All Visits"] * 1);
+                UniqueVisits.push(d["Unique Visits"] * 1);
+            });
+            option.xAxis[0].data = xlist;
+            option.series[0].data = AllVisits;
+            option.series[1].data = UniqueVisits;
+
+            var lineChart = echarts.init(document.getElementById('linechart'));
+            lineChart.setOption(option);
+        });
+        
+    </script>
+</body>
+</html>

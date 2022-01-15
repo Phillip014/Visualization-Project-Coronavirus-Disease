@@ -1,0 +1,277 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>index</title>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <link rel="stylesheet" href="css/comon0.css">
+    <link href="./bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+    <link href="layer/theme/default/layer.css" rel="stylesheet" />
+    <script>
+        $(window).load(function () {
+            $(".loading").fadeOut()
+        })
+        $(document).ready(function () {
+            var whei = $(window).width()
+            $("html").css({ fontSize: whei / 20 })
+            $(window).resize(function () {
+                var whei = $(window).width()
+                $("html").css({ fontSize: whei / 20 })
+            });
+        });
+    </script>
+    <script type="text/javascript" src="js/echarts.min.js"></script>
+    <style>
+        .btn-rate-box {
+            background: black;
+            opacity: 0.6;
+            color: #fff;
+            float: left;
+            width: 100%;
+            z-index: 99999;
+            margin-top: -10px;
+        }
+
+            .btn-rate-box .btn {
+                padding: 10px 10px;
+                display: block;
+                float: left;
+                border: 1px solid #222;
+                width: 33.33%;
+                text-align: center;
+                cursor: pointer;
+                font-size: 14px;
+            }
+
+            .btn-rate-box .selected {
+                background: #13bcd1;
+                color: #000;
+            }
+
+        .allnav .list-item {
+            border-bottom: 1px solid rgba(25,186,139,.17);
+            padding: 5px 5px;
+            float: left;
+            width: 100%;
+        }
+
+            .allnav .list-item .item-count {
+                float: left;
+                color: red;
+                font-size: 14px;
+                margin-right: 20px;
+            }
+
+            .allnav .list-item .item-name {
+                float: left;
+                color: #fff;
+                font-size: 14px;
+            }
+
+        .day {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="canvas" style="opacity: .2">
+        <iframe frameborder="0" src="js/index.html" style="width: 100%; height: 100%"></iframe>
+    </div>
+    <div class="loading">
+        <div class="loadbox"> <img src="images/loading.gif"> loading... </div>
+    </div>
+    <div class="head">
+        <h1>COVID TOTAL</h1>
+        <!--<div class="weather">
+            <span id="showTime"></span>
+        </div>-->
+
+        <script>
+            var t = null;
+            t = setTimeout(time, 1000);
+            function time() {
+                clearTimeout(t);
+                dt = new Date();
+                var y = dt.getFullYear();
+                var mt = dt.getMonth() + 1;
+                var day = dt.getDate();
+                var h = dt.getHours();
+                var m = dt.getMinutes();
+                var s = dt.getSeconds();
+                //document.getElementById("showTime").innerHTML = y + "年" + mt + "月" + day + "-" + h + "时" + m + "分" + s + "秒";
+                t = setTimeout(time, 1000);
+            }
+
+        </script>
+
+
+    </div>
+    <div class="mainbox">
+        <ul class="clearfix">
+            <li style="width:20%;">
+                <div class="bar">
+                    <div class="barbox">
+                        <ul class="clearfix">
+                            <li class="pulll_left counter total-count-val" style="text-align: center;width: 100%;"></li>
+                        </ul>
+                    </div>
+                    <div class="barbox2">
+                        <ul class="clearfix">
+                            <li class="pulll_left total-count-title" style="text-align: center;width: 100%;"></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="boxall" style="height: 6.7rem;overflow-y:auto;padding: 0 0;">
+                    <div class="alltitle total-title">Deaths</div>
+                    <div class="allnav total-list-box"></div>
+                </div>
+            </li>
+            <li style="width:50%;">
+                <div class="bar">
+                    <div class="barbox2">
+                        <ul class="clearfix">
+                            <li class="pulll_left map-chart-title" style="width: 100%;">
+                                <div class="input-group date form_date col-md-5" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd" style="background: transparent;left: calc((100% - 300px)/2);">
+                                    <input class="form-control" size="16" type="text" value="2020-5-18" style="background: transparent;color: #fff;">
+                                    <span class="input-group-addon" style="background: transparent;">
+                                        <span class="glyphicon glyphicon-calendar" style="color: #fff;"></span>
+                                    </span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="map">
+                    <div class="map1"><img src="images/lbx.png"></div>
+                    <div class="map2"><img src="images/jt.png"></div>
+                    <div class="map3"><img src="images/map.png"></div>
+                    <div class="map4" id="map_1" style="top:-10px;"></div>
+                    <div class="btn-rate-box btn-rate" style="">
+                        <a class="btn btn-rate-type selected" param="1" href="javascript:;">Deaths</a>
+                        <a class="btn btn-rate-type" param="2" href="javascript:;">Recovered</a>
+                        <a class="btn btn-rate-type" param="3" href="javascript:;">Confirmed</a>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <!--<div class="bar">
+                    <div class="barbox">
+                        <ul class="clearfix">
+                            <li class="pulll_left counter total-chian-count-val" style=""></li>
+                            <li class="pulll_left counter total-us-count-val" style=""></li>
+                        </ul>
+                    </div>
+                    <div class="barbox2">
+                        <ul class="clearfix">
+                            <li class="pulll_left total-chian-count-title" style="">Chian Deaths </li>
+                            <li class="pulll_left total-us-count-title" style="">US Deaths </li>
+                        </ul>
+                    </div>
+                </div>-->
+                <!--<ul class="clearfix" style="margin-top:10px;">
+                    <li class="pulll_left" style="width:50%;">
+                        <div class="boxall" style="height:3.4rem;overflow-y:auto;">
+                            <div class="allnav total-chian-list-box"></div>
+                        </div>
+                    </li>
+                    <li class="pulll_left" style="width:50%;">
+                        <div class="boxall" style="height:3.4rem;overflow-y:auto;">
+                            <div class="allnav total-us-list-box"></div>
+                        </div>
+                    </li>
+                </ul>-->
+                <div class="boxall" style="height: 4.3rem">
+                    <div class="alltitle">China/US</div>
+                    <div class="allnav" id="echart5" style="height:3rem;"></div>
+                    <div class="boxfoot">
+                        <div class="btn-rate-box btn-bar-box" style="">
+                            <a class="btn btn-confirmed-type selected" param="3" href="javascript:;" style="width:50%;">Confirmed</a>
+                            <a class="btn btn-deaths-type" param="2" href="javascript:;" style="width:50%;">Deaths</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="boxall" style="height: 3.8rem">
+                    <div class="alltitle">Global Confirmed</div>
+                    <div class="allnav" id="echart6" style="height: 2.5rem;"></div>
+                    <div class="boxfoot">
+                        <div class="btn-rate-box btn-line-box" style="">
+                            <a class="btn" param="1" href="javascript:;">Confirmed</a>
+                            <a class="btn btn-daily-type selected" param="3" href="javascript:;">Daily Cases</a>
+                            <a class="btn btn-log-type " param="2" href="javascript:;">Logarithmic</a>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="back"></div>
+    <div id="big-echart6-box" style="display:none;">
+        <div id="big-echart6"></div>
+        <div class="boxfoot">
+            <div class="btn-rate-box btn-line-box" style="">
+                <a class="btn" param="1" href="javascript:;">Confirmed</a>
+                <a class="btn btn-daily-type selected" param="3" href="javascript:;">Daily Cases</a>
+                <a class="btn btn-log-type " param="2" href="javascript:;">Logarithmic</a>
+            </div>
+        </div>
+    </div>
+    <div id="big-echart5-box" style="display:none;">
+        <div id="big-echart5"></div>
+        <div class="btn-rate-box btn-bar-box" style="margin-top: 0px">
+            <a class="btn btn-confirmed-type selected" param="3" href="javascript:;" style="width:50%;">Confirmed</a>
+            <a class="btn btn-deaths-type" param="2" href="javascript:;" style="width:50%;">Deaths</a>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="./bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="./datetimepicker/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="./datetimepicker/locales/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
+
+    <script src="js/world.js"></script>
+    <script src="js/d3.v5.min.js"></script>
+    <script src="layer/layer.js"></script>
+    <script src="js/globalcovid.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <script>
+        $("#echart6").click(function () {
+            $("#big-echart6").height($(window).height() - 82);
+            $("#big-echart6-box").show();
+            $("#big-echart6-box div").show();
+            var biglineChart = echarts.init(document.getElementById('big-echart6'));
+            let option = lineChart.getOption();
+            biglineChart.setOption(option);
+            var index = layer.open({
+                type: 1,
+                title: "Global Confirmed",
+                content: $("#big-echart6-box"),
+                area: ['620px', "390px"],
+                maxmin: true,
+                cancel: function () {
+                    $("#big-echart6-box div").hide();
+                }
+            });
+            layer.full(index);
+        });
+        $("#echart5").click(function () {
+            $("#big-echart5").height($(window).height() - 82);
+            $("#big-echart5-box").show();
+            $("#big-echart5-box div").show();
+            var bigbarChart = echarts.init(document.getElementById('big-echart5'));
+            let option = barChart.getOption();
+            bigbarChart.setOption(option);
+            var index2 = layer.open({
+                type: 1,
+                title: "China/US",
+                content: $("#big-echart5-box"),
+                area: ['620px', "390px"],
+                maxmin: true,
+                cancel: function () {
+                    $("#big-echart5-box div").hide();
+                }
+            });
+            layer.full(index2);
+        })
+    </script>
+</body>
+</html>
